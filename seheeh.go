@@ -6,6 +6,8 @@ import (
 	"flag"
 	"os"
 	"log"
+	"strings"
+
 
 	"github.com/gosuri/uitable"
 )
@@ -67,7 +69,7 @@ func main() {
 	fmt.Println("---------------------- SECURITY HEADERS -------------------------------------------------------------------")
 	for k,v := range securityHeaders {
 		for ke,va :=range resp.Header {
-			if k == ke{
+			if strings.EqualFold(k,ke){
 				table.AddRow(k,va,v)
 				break
 			}else{
