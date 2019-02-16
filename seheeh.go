@@ -1,45 +1,43 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
 	"flag"
-	"os"
+	"fmt"
 	"log"
+	"net/http"
+	"os"
 	"strings"
-
 
 	"github.com/gosuri/uitable"
 )
 
 var securityHeaders = map[string]string{
-	"Strict-Transport-Security": "max-age=6307200; includeSubdomains",
-	"X-XSS-Protection" : "1; mode=block",
-	"X-Frame-Options" : "DENY",
-	"X-Content-Type-Options" :"nosniff",
-	"Content-Security-Policy" : "script-src 'self'; object-src 'self'",
-	"X-Permitted-Cross-Domain-Policies" : "none",
-	"Referrer-Policy" : "update needed!",
-	"Expect-CT" : "update needed!",
-	"Feature-Policy" : "camera: 'none'; payment: 'none'; microphone: 'none'",
+	"Strict-Transport-Security":         "max-age=6307200; includeSubdomains",
+	"X-XSS-Protection":                  "1; mode=block",
+	"X-Frame-Options":                   "DENY",
+	"X-Content-Type-Options":            "nosniff",
+	"Content-Security-Policy":           "script-src 'self'; object-src 'self'",
+	"X-Permitted-Cross-Domain-Policies": "none",
+	"Referrer-Policy":                   "update needed!",
+	"Expect-CT":                         "update needed!",
+	"Feature-Policy":                    "camera: 'none'; payment: 'none'; microphone: 'none'",
 }
 
 var (
-	flagTarget = flag.String("t","", `Target host. Provide a URL: "https://example.com"`)
-	flagHelp = flag.Bool("h", false, "Print use instructions and exit.")
+	flagTarget = flag.String("t", "", `Target host. Provide a URL: "https://example.com"`)
+	flagHelp   = flag.Bool("h", false, "Print use instructions and exit.")
 )
-
 
 func main() {
 	var temp int = 0
 
 	table := uitable.New()
 	table.MaxColWidth = 100
-	table.AddRow("HEADER NAME","PARAMETERS","SUGGESTIONS (if possible)")
+	table.AddRow("HEADER NAME", "PARAMETERS", "SUGGESTIONS (if possible)")
 
 	flag.Parse()
 
-	if *flagHelp{
+	if *flagHelp {
 		fmt.Println("A shitty script to enum headers.")
 		fmt.Println("Usage: ")
 		fmt.Println("seheeh -t target URL")
@@ -48,7 +46,7 @@ func main() {
 		os.Exit(0)
 	}
 
-	if *flagTarget == ""{
+	if *flagTarget == "" {
 		log.Fatal("Missing target (-t https://example.com).")
 	}
 
@@ -67,19 +65,19 @@ func main() {
 
 	fmt.Println("-----------------------------------------------------------------------------------------------------------")
 	fmt.Println("---------------------- SECURITY HEADERS -------------------------------------------------------------------")
-	for k,v := range securityHeaders {
-		for ke,va :=range resp.Header {
-			if strings.EqualFold(k,ke){
-				table.AddRow(k,va,v)
+	for k, v := range securityHeaders {
+		for ke, va := range resp.Header {
+			if strings.EqualFold(k, ke) {
+				table.AddRow(k, va, v)
 				break
-			}else{
+			} else {
 				temp++
-		       }
-		       if temp > len(resp.Header){
-			       temp = 0
-			       table.AddRow(k,"NOT SET!",v)
-		       }
-	      }
-      }
-      fmt.Println(table)
+			}
+			if temp > len(resp.Header) {
+				temp = 0
+				table.AddRow(k, "NOT SET!", v)
+			}
+		}
+	}
+	fmt.Println(table)
 }
