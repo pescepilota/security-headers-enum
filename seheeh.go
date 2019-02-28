@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/gosuri/uitable"
 )
 
 var securityHeaders = map[string]string{
@@ -56,15 +54,14 @@ func main() {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("----------------------- RESPONSE HEADERS ------------------------------------------------------------------")
+	fmt.Println("####  RESPONSE HEADERS #### ")
 	for k, v := range resp.Header {
 		fmt.Print(k)
 		fmt.Print(" : ")
 		fmt.Println(v)
 	}
 
-	fmt.Println("-----------------------------------------------------------------------------------------------------------")
-	fmt.Println("---------------------- SECURITY HEADERS -------------------------------------------------------------------")
+	fmt.Println("#### SECURITY HEADERS ####")
 	for k, v := range securityHeaders {
 		for ke, va := range resp.Header {
 			if strings.EqualFold(k, ke) {
