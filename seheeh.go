@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+
+	"github.com/gosuri/uitable"
 )
 
 var securityHeaders = map[string]string{
